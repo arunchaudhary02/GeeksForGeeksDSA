@@ -32,41 +32,102 @@ class DriverClass {
 
 /*Complete the function below*/
 
+/// By DFS (Topological Sort)
+
+// class Solution {
+//     // Function to detect cycle in a directed graph.
+//     public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
+//         // code here
+//         int[] visited = new int[V];
+//         int[] pathVisited = new int[V];
+        
+//         for(int i = 0; i < V; i++) {
+//             if(visited[i] == 0) {
+//                 if(dfsCheck(i, visited, pathVisited, adj) == true) {
+//                     return true;
+//                 }
+//             }
+//         }
+        
+//         return false;
+        
+//     }
+    
+//     private boolean dfsCheck(int node, int[] visited, int[] pathVisited, ArrayList<ArrayList<Integer>> adj) {
+//         visited[node] = 1;
+//         pathVisited[node] = 1;
+        
+//         for(int it : adj.get(node)) {
+//             if(visited[it] == 0) {
+//                 if(dfsCheck(it, visited, pathVisited, adj) == true) {
+//                     return true;
+//                 }
+//             }
+//             else if(pathVisited[it] == 1) {
+//                 return true;
+//             }
+//         }
+        
+//         pathVisited[node] = 0;
+//         return false;
+//     }
+// }
+
+
+
+
+//// By BFS  (Khan's Algo)
+
+
+
 class Solution {
     // Function to detect cycle in a directed graph.
     public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
-        // code here
-        int[] visited = new int[V];
-        int[] pathVisited = new int[V];
-        
+        int[] indegree = new int[V];
         for(int i = 0; i < V; i++) {
-            if(visited[i] == 0) {
-                if(dfsCheck(i, visited, pathVisited, adj) == true) {
-                    return true;
+            for(int neighbour : adj.get(i)) {
+                indegree[neighbour]++;
+            }
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        
+        for(int i = 0; i < indegree.length; i++) {
+            if(indegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        
+        int count = 0;
+        while(!queue.isEmpty()) {
+            int currNode = queue.poll();
+            count++;
+            
+            for(int neighbour : adj.get(currNode)) {
+                indegree[neighbour]--;
+                if(indegree[neighbour] == 0) {
+                    queue.offer(neighbour);
                 }
             }
         }
         
-        return false;
-        
-    }
-    
-    private boolean dfsCheck(int node, int[] visited, int[] pathVisited, ArrayList<ArrayList<Integer>> adj) {
-        visited[node] = 1;
-        pathVisited[node] = 1;
-        
-        for(int it : adj.get(node)) {
-            if(visited[it] == 0) {
-                if(dfsCheck(it, visited, pathVisited, adj) == true) {
-                    return true;
-                }
-            }
-            else if(pathVisited[it] == 1) {
-                return true;
-            }
-        }
-        
-        pathVisited[node] = 0;
-        return false;
+        if(count == V) return false;
+        return true;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
