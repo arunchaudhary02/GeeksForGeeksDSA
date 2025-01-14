@@ -54,36 +54,119 @@ class Main {
 // } Driver Code Ends
 
 
+
+
+//=>    By DFS //////////////////////////////////////
+
+// class Solution {
+//     // Function to return list containing vertices in Topological order.
+//     static ArrayList<Integer> topologicalSort(ArrayList<ArrayList<Integer>> adj) {
+//         // Array to keep track of visited nodes
+//         boolean[] visited = new boolean[adj.size()];
+
+//         // Stack to store the topological order
+//         Stack<Integer> stack = new Stack<>();
+
+//         // Perform DFS for each node that has not been visited
+//         for (int i = 0; i < visited.length; i++) {
+//             if (!visited[i]) {
+//                 // Call DFS to process the node and its neighbors
+//                 dfs(i, visited, stack, adj);
+//             }
+//         }
+
+//         // Create a list to store the topological order
+//         ArrayList<Integer> topologicalOrder = new ArrayList<>();
+//         // Pop elements from the stack to get the topological order
+//         while (!stack.isEmpty()) {
+//             topologicalOrder.add(stack.pop());
+//         }
+
+//         // Return the topological order
+//         return topologicalOrder;
+//     }
+
+//     // Helper method to perform DFS on the graph
+//     private static void dfs(int node, boolean[] visited, Stack<Integer> stack, ArrayList<ArrayList<Integer>> adj) {
+//         // Mark the current node as visited
+//         visited[node] = true;
+
+//         // Iterate over all neighbors of the current node
+//         for (int neighbor : adj.get(node)) {
+//             // If the neighbor has not been visited, perform DFS on it
+//             if (!visited[neighbor]) {
+//                 dfs(neighbor, visited, stack, adj);
+//             }
+//         }
+
+//         // After visiting all neighbors, push the current node onto the stack
+//         stack.push(node);
+//     }
+// }
+
+
+//=>.   By BFS (Khan's Algorithms) /////////////////////////////
+
+
 class Solution {
-    // Function to return list containing vertices in Topological order.
+    // Function to return a list containing vertices in Topological order.
     static ArrayList<Integer> topologicalSort(ArrayList<ArrayList<Integer>> adj) {
-        // Your code here
-        boolean[] visited = new boolean[adj.size()];
-        Stack<Integer> stack = new Stack<>();
+        int[] indegree = new int[adj.size()]; // Array to store the in-degree of each vertex
         
-        for(int i = 0; i < visited.length; i++) {
-            if(!visited[i]) {
-                dfs(i, visited, stack, adj);
+        // Calculate in-degree for each vertex
+        for (int i = 0; i < adj.size(); i++) {
+            for (int neighbour : adj.get(i)) {
+                indegree[neighbour]++; // Increment in-degree for each outgoing edge
             }
         }
-        
+
+        // Queue to manage vertices with in-degree 0
+        Queue<Integer> queue = new LinkedList<>();
+
+        // Add all vertices with in-degree 0 to the queue
+        for (int i = 0; i < indegree.length; i++) {
+            if (indegree[i] == 0) {
+                queue.offer(i); // Add vertex to the queue if it has no dependencies
+            }
+        }
+
+        // List to store the topological order
         ArrayList<Integer> topologicalOrder = new ArrayList<>();
-        while(!stack.isEmpty()) {
-            topologicalOrder.add(stack.pop());
-        }
         
-        return topologicalOrder;
-    }
-    
-    
-    private static void dfs(int node, boolean[] visited, Stack stack, ArrayList<ArrayList<Integer>> adj) {
-        visited[node] = true;
-        for(int neighbor : adj.get(node)) {
-            if(!visited[neighbor]) {
-                dfs(neighbor, visited, stack, adj);
+        // Process the vertices in the queue
+        while (!queue.isEmpty()) {
+            int currNode = queue.poll(); // Remove vertex from the queue
+            topologicalOrder.add(currNode); // Add it to the topological order
+            
+            // Reduce the in-degree of its neighbors
+            for (int neighbour : adj.get(currNode)) {
+                indegree[neighbour]--; // Decrease in-degree by 1
+                if (indegree[neighbour] == 0) {
+                    queue.offer(neighbour); // If in-degree becomes 0, add to queue
+                }
             }
         }
-        
-        stack.push(node);
+
+        return topologicalOrder; // Return the topological order
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
