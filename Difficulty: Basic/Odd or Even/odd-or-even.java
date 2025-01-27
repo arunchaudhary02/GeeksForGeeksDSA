@@ -25,6 +25,8 @@ class GFG {
 class Solution {
     static boolean isEven(int n) {
         // code here
-        return n % 2 == 0;
+        
+        // If the least significant bit is 0, the number is even
+        return (n & 1) == 0;
     }
 }
