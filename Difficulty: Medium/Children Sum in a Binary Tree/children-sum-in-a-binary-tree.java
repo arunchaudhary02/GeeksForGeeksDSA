@@ -131,6 +131,38 @@ class Node{
 }
 
 */
+//  Recursion Approach
+
+
+// class Solution
+// {
+//     //Function to check whether all nodes of a tree have the value 
+//     //equal to the sum of their child nodes.
+//     public static int isSumProperty(Node root)
+//     {
+//         // add your code here
+        
+//         if(root == null || (root.left == null && root.right == null)) {
+//             return 1;
+//         }
+        
+//         int sum = 0;
+        
+//         if(root.left != null) {
+//             sum += root.left.data;
+//         }
+        
+//         if(root.right != null) {
+//             sum += root.right.data;
+//         }
+        
+//         return (root.data == sum) && (isSumProperty(root.left) == 1) && (isSumProperty(root.right) == 1) ? 1 : 0;
+        
+//     }
+// }
+
+// Iterative Approach
+
 class Solution
 {
     //Function to check whether all nodes of a tree have the value 
@@ -139,21 +171,45 @@ class Solution
     {
         // add your code here
         
-        if(root == null || (root.left == null && root.right == null)) {
+        if(root == null) {
             return 1;
         }
         
-        int sum = 0;
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
         
-        if(root.left != null) {
-            sum += root.left.data;
+        while(!queue.isEmpty()) {
+            Node curr = queue.poll();
+            
+            if(curr.left == null && curr.right == null) {
+                continue;
+            }
+            
+            int sum = 0;
+            
+            if(curr.left != null) {
+                sum += curr.left.data;
+            }
+            
+            if(curr.right != null) {
+                sum += curr.right.data;
+            }
+            
+            if(sum != curr.data) {
+                return 0;
+            }
+            
+            if(curr.left != null) {
+                queue.offer(curr.left);
+            }
+            
+            if(curr.right != null){
+                queue.offer(curr.right);
+            }
+            
         }
         
-        if(root.right != null) {
-            sum += root.right.data;
-        }
-        
-        return (root.data == sum) && (isSumProperty(root.left) == 1) && (isSumProperty(root.right) == 1) ? 1 : 0;
+        return 1;
         
     }
 }
