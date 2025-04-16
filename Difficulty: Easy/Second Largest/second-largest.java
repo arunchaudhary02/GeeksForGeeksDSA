@@ -24,23 +24,23 @@ public class Main {
 // } Driver Code Ends
 
 
-// User function Template for Java
-
 class Solution {
     public int getSecondLargest(int[] arr) {
-        // Code Here
-        int first = -1;
-        int second = -1;
-        for(int num : arr) {
-            if(num > first) {
-                second = first;
-                first = num;
+        // code here
+        int firstL = Integer.MIN_VALUE;
+        int secondL = Integer.MIN_VALUE;
+        
+        for(int i = 0; i < arr.length; i++) {
+            if(firstL < arr[i]) {
+                secondL = firstL;
+                firstL = arr[i];
             }
-            else if(num > second && num != first) {
-                second = num;
-            }
+            
+            else if(secondL < arr[i] && arr[i] != firstL) {
+                secondL = arr[i];
+            } 
         }
         
-        return second;
+        return (secondL == Integer.MIN_VALUE) ? -1 : secondL;
     }
 }
