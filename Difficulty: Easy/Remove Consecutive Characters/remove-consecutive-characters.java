@@ -4,11 +4,9 @@ class Solution {
     public String removeConsecutiveCharacter(String s) {
         // code here
         
-        if(s.length() == 0) {
-            return "";
-        }
-        
+        if (s == null || s.length() == 0) return ""; // handle empty string
         StringBuilder result = new StringBuilder();
+        
         result.append(s.charAt(0));
         
         for(int i = 1; i < s.length(); i++) {
@@ -18,6 +16,5 @@ class Solution {
         }
         
         return result.toString();
-        
     }
 }
