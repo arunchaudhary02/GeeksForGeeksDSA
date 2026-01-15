@@ -2,16 +2,14 @@
 class Solution {
     char firstRep(String S) {
         // your code here
-        
-        int[] count = new int[26];
+        int[] freq = new int[26];
         
         for(char c : S.toCharArray()) {
-            count[c - 'a']++;
+            freq[c - 'a']++;
         }
         
         for(char c : S.toCharArray()) {
-            int index = c - 'a';
-            if(count[index] > 1) {
+            if(freq[c - 'a'] > 1) {
                 return c;
             }
         }
