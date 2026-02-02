@@ -1,0 +1,35 @@
+class Solution {
+    
+    public int maxLength(String s) {
+        // code here
+        
+        Stack<Integer> stack = new Stack<>();
+        stack.push(-1); // base 
+        
+        int maxLen = 0;
+        
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == '(') {
+                stack.push(i);
+            } 
+            else{
+                stack.pop();
+                if(stack.isEmpty()) {
+                    stack.push(i); // inserting base
+                }
+                else{
+                    maxLen = Math.max(maxLen, i - stack.peek());
+                }
+            }
+        }
+        
+        return maxLen;
+        
+    }
+}
+
+
+
+
+
+
