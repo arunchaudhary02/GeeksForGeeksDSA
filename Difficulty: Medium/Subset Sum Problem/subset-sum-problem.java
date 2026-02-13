@@ -1,35 +1,31 @@
 class Solution {
-    
-    static int n;
-    static Boolean[][] dp;
 
     static Boolean isSubsetSum(int arr[], int sum) {
         // code here
-        n = arr.length;
-        dp = new Boolean[n][sum + 1];
-        return recursion(arr, 0, sum);
+        
+        return helperRecursion(0, 0, sum, arr);
     }
     
-    private static boolean recursion(int[] arr, int index, int target) {
-        if(target == 0) {
+    static boolean helperRecursion(int index, int currSum, int target, int[] arr) {
+        
+        // ✅ If sum matched
+        if(currSum == target) {
             return true;
         }
-        
-        if(n <= index || target < 0) {
+    
+        // ✅ If we reached end
+        if(index == arr.length) {
             return false;
         }
-        
-        if(dp[index][target] != null) {
-            return dp[index][target];
+    
+        // ✅ If sum exceeded (only valid for positive numbers)
+        if(currSum > target) {
+            return false;
         }
-        
-        boolean take = false;
-        if(arr[index] <= target) {
-            take = recursion(arr, index + 1, target - arr[index]);
-        }
-        boolean notTake = recursion(arr, index + 1, target);
-        
-        return dp[index][target] = take || notTake;
-        
+    
+        // Take OR Not Take
+        return helperRecursion(index + 1, currSum + arr[index], target, arr) ||
+               helperRecursion(index + 1, currSum, target, arr);
+            
     }
 }
