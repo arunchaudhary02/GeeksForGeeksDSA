@@ -1,16 +1,18 @@
 class Solution {
-    // Function to remove duplicates from the given array.
     ArrayList<Integer> removeDuplicates(int[] arr) {
         // code here
-        Set<Integer> set = new HashSet<>();
-        ArrayList<Integer> result = new ArrayList<>();
         
-        for(int ele : arr) {
-            if(!set.contains(ele)) {
-                result.add(ele);
+        ArrayList<Integer> result = new ArrayList<>();
+         
+        HashSet<Integer> s = new HashSet<>();
+        
+        for (int i = 0; i < arr.length; i++) {
+            if (!s.contains(arr[i])) { 
+                s.add(arr[i]);  
+                result.add(arr[i]);
             }
-            set.add(ele);
         }
+
         
         return result;
     }
