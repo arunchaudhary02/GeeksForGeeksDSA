@@ -1,51 +1,56 @@
 class Solution {
 
-    void mergeSort(int arr[], int left, int right) {
+    void mergeSort(int arr[], int l, int r) {
         // code here
         
-        if(left < right) {
-            int mid = left + (right - left) / 2;
-            mergeSort(arr, left, mid);
-            mergeSort(arr, mid + 1, right);
-            
-            merge(arr, left, mid, right);
+        if(l < r) {
+            int mid = l + (r - l) / 2;
+            mergeSort(arr, l, mid);
+            mergeSort(arr, mid + 1, r);
+            merge(arr, l, mid, r);
         }
     }
     
-    private void merge(int[] arr, int left, int mid, int right) {
-        int n1 = mid - left + 1;
-        int n2 = right - mid;
+    private void merge(int[] arr, int l, int mid, int r) {
         
-        int[] leftArr = new int[n1];
-        int[] rightArr = new int[n2];
+        int n1 = mid - l + 1;
+        int n2 = r - mid;
+        
+        int[] leftTemp = new int[n1];
+        int[] rightTemp = new int[n2];
         
         for(int i = 0; i < n1; i++) {
-            leftArr[i] = arr[left + i];
+            leftTemp[i] = arr[l + i];
         }
-        
         for(int i = 0; i < n2; i++) {
-            rightArr[i] = arr[mid + 1 + i];
+            rightTemp[i] = arr[mid + 1 + i];
         }
         
-        int L = 0, R = 0, K = left;
+        int L = 0, R = 0;
+        int K = l;
         
         while(L < n1 && R < n2) {
-            if(leftArr[L] < rightArr[R]) {
-                arr[K++] = leftArr[L++];
+            if(leftTemp[L] < rightTemp[R]) {
+                arr[K] = leftTemp[L];
+                L++;
             }
             else{
-                arr[K++] = rightArr[R++];
+                arr[K] = rightTemp[R];
+                R++;
             }
+            K++;
         }
         
         while(L < n1) {
-            arr[K++] = leftArr[L++];
+            arr[K] = leftTemp[L];
+            L++;
+            K++;
         }
         
         while(R < n2) {
-            arr[K++] = rightArr[R++];
+            arr[K] = rightTemp[R];
+            R++;
+            K++;
         }
     }
-    
-    
 }
