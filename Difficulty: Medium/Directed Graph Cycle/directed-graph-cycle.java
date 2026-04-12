@@ -1,3 +1,6 @@
+// DFS
+
+/*
 class Solution {
     public boolean isCyclic(int V, int[][] edges) {
         // code here
@@ -51,6 +54,85 @@ class Solution {
         return false;
     }
 }
+
+*/
+
+// BFS
+
+class Solution {
+    public boolean isCyclic(int V, int[][] edges) {
+        
+        List<List<Integer>> adj = new ArrayList<>();
+        
+        for(int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int[] edge : edges) {
+            adj.get(edge[0]).add(edge[1]);
+        }
+        
+        int[] indegree = new int[V];
+        
+        // Calculate indegree
+        for(int i = 0; i < V; i++) {
+            for(int neighbour : adj.get(i)) {
+                indegree[neighbour]++;
+            }
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+
+        // Add nodes with indegree 0
+        for(int i = 0; i < V; i++) {
+            if(indegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+
+        int count = 0; // FIXED
+
+        while(!queue.isEmpty()) {
+            int currNode = queue.poll();
+            count++;
+
+            for(int neighbour : adj.get(currNode)) {
+                indegree[neighbour]--;
+
+                if(indegree[neighbour] == 0) {
+                    queue.offer(neighbour);
+                }
+            }
+        }
+
+        // If processed nodes != V → cycle exists
+        return count != V;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
