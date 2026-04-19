@@ -1,22 +1,25 @@
 class Solution {
     static ArrayList<Integer> leaders(int arr[]) {
         // code here
+        
+        ArrayList<Integer> result = new ArrayList<>();
+        Stack<Integer> monotonicStack = new Stack<>();
+        
         int n = arr.length;
         
-        Stack<Integer> stack = new Stack<>();
-        ArrayList<Integer> result = new ArrayList<>();
-        stack.push(arr[n - 1]);
+        monotonicStack.push(arr[n - 1]);
         
         for(int i = n - 2; i >= 0; i--) {
-            if(stack.peek() <= arr[i]) {
-                stack.push(arr[i]);
+            if(arr[i] >= monotonicStack.peek()) {
+                monotonicStack.push(arr[i]);
             }
         }
         
-        while(!stack.isEmpty()) {
-            result.add(stack.pop());
+        for(Integer ele : monotonicStack) {
+            result.add(ele);
         }
         
+        Collections.reverse(result);
         return result;
     }
 }
