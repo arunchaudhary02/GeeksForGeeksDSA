@@ -14,7 +14,6 @@ class Solution {
                 currSum -= arr[L];
                 L++;
             }
-            
             if(currSum == target) {
                 ArrayList<Integer> list = new ArrayList<>();
                 list.add(L + 1);
