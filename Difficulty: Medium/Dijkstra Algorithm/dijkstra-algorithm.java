@@ -1,98 +1,118 @@
-//{ Driver Code Starts
-import java.io.*;
-import java.lang.*;
-import java.util.*;
-
-class iPair {
-    int first, second;
-
-    iPair(int first, int second) {
-        this.first = first;
-        this.second = second;
-    }
-}
-
-class DriverClass {
-    public static void main(String args[]) throws IOException {
-        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-        int t = Integer.parseInt(read.readLine());
-        while (t-- > 0) {
-            String str[] = read.readLine().trim().split(" ");
-            int V = Integer.parseInt(str[0]);
-            int E = Integer.parseInt(str[1]);
-
-            ArrayList<ArrayList<iPair>> adj = new ArrayList<ArrayList<iPair>>();
-            for (int i = 0; i < V; i++) {
-                adj.add(new ArrayList<iPair>());
-            }
-
-            int i = 0;
-            while (i++ < E) {
-                String S[] = read.readLine().trim().split(" ");
-                int u = Integer.parseInt(S[0]);
-                int v = Integer.parseInt(S[1]);
-                int w = Integer.parseInt(S[2]);
-                iPair t1 = new iPair(v, w);
-                iPair t2 = new iPair(u, w);
-                adj.get(u).add(t1);
-                adj.get(v).add(t2);
-            }
-
-            int src = Integer.parseInt(read.readLine());
-
-            Solution ob = new Solution();
-
-            ArrayList<Integer> res = ob.dijkstra(adj, src);
-
-            for (i = 0; i < V; i++) System.out.print(res.get(i) + " ");
-            System.out.println();
-
-            System.out.println("~");
-        }
-    }
-}
-// } Driver Code Ends
-
-
 /*
-class iPair {
-    int first, second;
-
-    iPair(int first, int second) {
-        this.first = first;
-        this.second = second;
+class Solution {
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // code here
+        
+        List<List<int[]>> adjList = new ArrayList<>();
+        
+        for(int i = 0; i < V; i++) {
+            adjList.add(new ArrayList<>());
+        }
+        
+        for(int[] edge : edges) {
+            int node1 = edge[0];
+            int node2 = edge[1];
+            int weight = edge[2];
+            
+            adjList.get(node1).add(new int[]{node2, weight});
+            adjList.get(node2).add(new int[]{node1, weight});
+        }
+        
+        int[] distance = new int[V];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        
+        distance[src] = 0;
+        
+        // {weight, node}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> (a[0] - b[0]));
+        pq.offer(new int[]{0, src});
+        
+        while(!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            
+            int d = curr[0];
+            int node = curr[1];
+            
+            if(distance[node] < d) continue;
+            
+            for(int[] neighbour : adjList.get(node)) {
+                int adjNode = neighbour[0];
+                int weight = neighbour[1];
+                
+                if(d + weight < distance[adjNode]) {
+                    distance[adjNode] = d + weight;
+                    pq.offer(new int[]{d + weight, adjNode});
+                }
+            }
+        }
+        
+        return distance;
     }
 }
 */
 
+// Better Approach using TreeSet
+
 
 class Solution {
-    // Function to find the shortest distance of all the vertices
-    // from the source vertex src.
-    ArrayList<Integer> dijkstra(ArrayList<ArrayList<iPair>> adj, int src) {
-        // Write your code here
-        int n = adj.size();
-        int[] dist = new int[n];
-        for(int i=0;i<n;i++){
-            dist[i] = Integer.MAX_VALUE;
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // code here
+        
+        List<List<int[]>> adjList = new ArrayList<>();
+        
+        for(int i = 0; i < V; i++) {
+            adjList.add(new ArrayList<>());
         }
-        dist[src] = 0;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[0] - b[0]);
-        pq.add(new int[]{0,src});
-        while(!pq.isEmpty()){
-            int[] data = pq.poll();
-            int currNode = data[1];
-            for(iPair pair : adj.get(currNode)){
-                if(data[0] + pair.second < dist[pair.first]){
-                    dist[pair.first] = data[0] + pair.second;
-                    pq.add(new int[]{dist[pair.first],pair.first});
+        
+        for(int[] edge : edges) {
+            int node1 = edge[0];
+            int node2 = edge[1];
+            int weight = edge[2];
+            
+            adjList.get(node1).add(new int[]{node2, weight});
+            adjList.get(node2).add(new int[]{node1, weight});
+        }
+        
+        int[] distance = new int[V];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        
+        distance[src] = 0;
+        
+        // {weight, node}
+        TreeSet<int []> set = new TreeSet<>((a, b) -> {
+            if(a[0] == b[0]) {
+                return a[1] - b[1];
+            }
+            return a[0] - b[0];
+        });
+        
+        set.add(new int[]{0, src});
+        
+        while(!set.isEmpty()) {
+            int[] curr = set.pollFirst();
+            
+            int d = curr[0];
+            int node = curr[1];
+            
+            for(int[] neighbour : adjList.get(node)) {
+                int adjNode = neighbour[0];
+                int weight = neighbour[1];
+                
+                if(d + weight < distance[adjNode]) {
+                     // Remove old entry if it exists
+                    if (distance[adjNode] != Integer.MAX_VALUE) {
+                        set.remove(new int[]{distance[adjNode], adjNode});
+                    }
+
+                    distance[adjNode] = d + weight;
+
+                    set.add(new int[]{distance[adjNode], adjNode});
                 }
             }
         }
-        ArrayList<Integer> res =  new ArrayList<>();
-        for(int a: dist){
-            res.add(a);
-        }
-        return res;
+        
+        return distance;
     }
 }
+
+
